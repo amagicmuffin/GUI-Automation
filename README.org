@@ -1,0 +1,6 @@
+* what is this?
+  qol 3rd party app for minecraft survival that gives stuff like holding down w and left click so I can strip mine without advancing my carpal tunnel.
+  
+* installation
+  idk man it's a python file figure it out
+  
