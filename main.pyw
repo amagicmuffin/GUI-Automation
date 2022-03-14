@@ -8,6 +8,8 @@ from tkinter import *
   + autoclicker
     + when click background, pause autoclicker
   + reload configs button
+  + hold down things
+    + implement with a checkbox menu (hold down w and left click or just w, etc)
 '''
 
 screen = Tk()
