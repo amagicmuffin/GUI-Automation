@@ -41,6 +41,8 @@ def startAutoclick():
     AUTOCLICKING = True
     autoclicker.after(0, autoclick())
 
+
+### Autoclicking things
 def autoclick():
     global WORKING, AUTOCLICKING
     
@@ -52,15 +54,55 @@ def autoclick():
     if AUTOCLICKING:
         autoclicker.after(AUTOCLICK_SPEED, autoclick)
 
-#
 autoclicker = Label(sidebar, text="autoclick", font=("", 24), padx=20, pady=5, width=10)
 autoclicker.bind("<Button-1>", lambda e: startAutoclick())
 autoclicker.pack()
 
-# 
+### hold button things
 holdLMB = Label(sidebar, text="hold LMB", font=("", 24), padx=20, pady=5, width=10)
 holdLMB.bind("<Button-1>",lambda e: print("LMB clicked"))
 holdLMB.pack()
+
+### Toggle keyboard hold down
+keyboardToggles = {
+    "w": False,
+    "a": False,
+    "s": False,
+    "d": False,
+    "shift": False,
+    "space": False
+}
+
+keyboardGUI = Label(sidebar)
+
+def keyboardToggle(key):
+    if keyboardToggles[key]:
+        keyboardToggles[key] = False
+    else:
+        keyboardToggles[key] = True
+holdWToggle = Label(keyboardGUI, text="W", font=("", 24), padx=5, pady=5)
+holdWToggle.grid(row=0, column=1)
+holdWToggle.bind("<Button-1>",lambda e: wToggle())
+
+holdAToggle = Label(keyboardGUI, text="A", font=("", 24), padx=5, pady=5)
+holdAToggle.grid(row=1, column=0)
+
+holdSToggle = Label(keyboardGUI, text="S", font=("", 24), padx=5, pady=5)
+holdSToggle.grid(row=1, column=1)
+
+holdDToggle = Label(keyboardGUI, text="D", font=("", 24), padx=5, pady=5)
+holdDToggle.grid(row=1, column=2)
+
+holdShiftToggle = Label(keyboardGUI, text="Shift", font=("", 24), padx=5, pady=5)
+holdShiftToggle.grid(row=2, column=0)
+
+holdSpaceToggle = Label(keyboardGUI, text="Space", font=("", 24), padx=5, pady=5)
+holdSpaceToggle.grid(row=2, column=1)
+
+startHoldingBtn = Label(keyboardGUI, text="Start", font=("", 24), padx=5, pady=5)
+startHoldingBtn.grid(row=2, column=2)
+
+keyboardGUI.pack()
 
 # screen
 screen.attributes('-fullscreen',True)
