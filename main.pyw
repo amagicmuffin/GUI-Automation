@@ -1,113 +1,158 @@
 from tkinter import *
+import pyautogui
 
-'''main.py
+"""main.py
 * TODO
   + text file config
     +  each line: config = 2 then can remove whitespace and process
-    + 
-  + autoclicker
-    + when click background, pause autoclicker
+    + use .ini, more research in phone
   + reload configs button
-  + hold down things
-    + implement with a checkbox menu (hold down w and left click or just w, etc)
-  + global "something happening?" const that can be turned off by click background
-'''
+  + much later: refactor to not look terrible
+"""
+BACKGROUND_IMAGE = "darkBackground.png"
+
 WORKING = False
+BUFFER_TIME = 1000
 
 AUTOCLICKING = False
 AUTOCLICK_SPEED = 1000
 
 screen = Tk()
-screen.title('Automation GUI')
+screen.title("Automation GUI")
+
 
 def stopAutomation():
     global WORKING
     WORKING = False
 
+
 # set background image
-img = PhotoImage(file="media\darkenedPurpleSky.png")
+img = PhotoImage(file=f"media//{BACKGROUND_IMAGE}")
 background = Label(screen, image=img)
-background.bind("<Button-1>",lambda e: stopAutomation())
+background.bind("<Button-1>", lambda e: stopAutomation())
 background.place(x=0, y=0, relwidth=1, relheight=1)
 
 # main sidebar, put stuff in here
 sidebar = Label()
 sidebar.pack(side=LEFT)
 
+
 def startAutoclick():
     global WORKING, AUTOCLICKING
-    
+
     WORKING = True
     AUTOCLICKING = True
-    autoclicker.after(0, autoclick())
+    autoclicker.after(
+        BUFFER_TIME, autoclick
+    )  # immediately eval's autoclick()
 
 
-### Autoclicking things
+# Autoclicking things
 def autoclick():
     global WORKING, AUTOCLICKING
-    
+
     print("clicked once")
+    pyautogui.click()
 
     if not WORKING:
         AUTOCLICKING = False
-        
+
     if AUTOCLICKING:
         autoclicker.after(AUTOCLICK_SPEED, autoclick)
+
 
 autoclicker = Label(sidebar, text="autoclick", font=("", 24), padx=20, pady=5, width=10)
 autoclicker.bind("<Button-1>", lambda e: startAutoclick())
 autoclicker.pack()
 
-### hold button things
-holdLMB = Label(sidebar, text="hold LMB", font=("", 24), padx=20, pady=5, width=10)
-holdLMB.bind("<Button-1>",lambda e: print("LMB clicked"))
-holdLMB.pack()
 
-### Toggle keyboard hold down
+# Toggle keyboard hold down
 keyboardToggles = {
+    "lmb": False,
+    "rmb": False,
     "w": False,
     "a": False,
     "s": False,
     "d": False,
     "shift": False,
-    "space": False
+    "space": False,
 }
+
+
+def startHolding():
+    """shift and space are first so you dont fall off a cliff because crouch wasn't pressed"""
+    if keyboardToggles["shift"]:
+        pyautogui.keyDown("shift")
+    if keyboardToggles["space"]:
+        pyautogui.keyDown("space")
+    if keyboardToggles["lmb"]:
+        pyautogui.mouseDown(button="LEFT")
+    if keyboardToggles["rmb"]:
+        pyautogui.mouseDown(button="RIGHT")
+    if keyboardToggles["w"]:
+        pyautogui.keyDown("w")
+    if keyboardToggles["a"]:
+        pyautogui.keyDown("a")
+    if keyboardToggles["s"]:
+        pyautogui.keyDown("s")
+    if keyboardToggles["d"]:
+        pyautogui.keyDown("d")
+
 
 keyboardGUI = Label(sidebar)
 
-def keyboardToggle(key):
+
+def keyboardToggle(key, label):
     if keyboardToggles[key]:
         keyboardToggles[key] = False
+        label.config(bg="grey94")  # default color
     else:
         keyboardToggles[key] = True
+        label.config(bg="grey80")
+
+
+# hold button things
+holdLMBToggle = Label(keyboardGUI, text="LMB", font=("", 24), padx=20, pady=5)
+holdLMBToggle.bind("<Button-1>", lambda e: keyboardToggle("lmb", holdLMBToggle))
+holdLMBToggle.grid(row=0, column=0, sticky="nwes")
+
 holdWToggle = Label(keyboardGUI, text="W", font=("", 24), padx=5, pady=5)
-holdWToggle.grid(row=0, column=1)
-holdWToggle.bind("<Button-1>",lambda e: wToggle())
+holdWToggle.grid(row=0, column=1, sticky="nwes")
+holdWToggle.bind("<Button-1>", lambda e: keyboardToggle("w", holdWToggle))
+
+holdRMBToggle = Label(keyboardGUI, text="RMB", font=("", 24), padx=20, pady=5)
+holdRMBToggle.bind("<Button-1>", lambda e: keyboardToggle("rmb", holdRMBToggle))
+holdRMBToggle.grid(row=0, column=2, sticky="nwes")
 
 holdAToggle = Label(keyboardGUI, text="A", font=("", 24), padx=5, pady=5)
-holdAToggle.grid(row=1, column=0)
+holdAToggle.grid(row=1, column=0, sticky="nwes")
+holdAToggle.bind("<Button-1>", lambda e: keyboardToggle("a", holdAToggle))
 
 holdSToggle = Label(keyboardGUI, text="S", font=("", 24), padx=5, pady=5)
-holdSToggle.grid(row=1, column=1)
+holdSToggle.grid(row=1, column=1, sticky="nwes")
+holdSToggle.bind("<Button-1>", lambda e: keyboardToggle("s", holdSToggle))
 
 holdDToggle = Label(keyboardGUI, text="D", font=("", 24), padx=5, pady=5)
-holdDToggle.grid(row=1, column=2)
+holdDToggle.grid(row=1, column=2, sticky="nwes")
+holdDToggle.bind("<Button-1>", lambda e: keyboardToggle("d", holdDToggle))
 
 holdShiftToggle = Label(keyboardGUI, text="Shift", font=("", 24), padx=5, pady=5)
-holdShiftToggle.grid(row=2, column=0)
+holdShiftToggle.grid(row=2, column=0, sticky="nwes")
+holdShiftToggle.bind("<Button-1>", lambda e: keyboardToggle("shift", holdShiftToggle))
 
 holdSpaceToggle = Label(keyboardGUI, text="Space", font=("", 24), padx=5, pady=5)
-holdSpaceToggle.grid(row=2, column=1)
+holdSpaceToggle.grid(row=2, column=1, sticky="nwes")
+holdSpaceToggle.bind("<Button-1>", lambda e: keyboardToggle("space", holdSpaceToggle))
 
 startHoldingBtn = Label(keyboardGUI, text="Start", font=("", 24), padx=5, pady=5)
-startHoldingBtn.grid(row=2, column=2)
+startHoldingBtn.grid(row=2, column=2, sticky="nwes")
+startHoldingBtn.bind("<Button-1>", lambda e: startHoldingBtn.after(BUFFER_TIME, startHolding))
 
 keyboardGUI.pack()
 
 # screen
-screen.attributes('-fullscreen',True)
+screen.attributes("-fullscreen", True)
 screen.bind("<Escape>", lambda e: screen.destroy())
-
 
 
 screen.mainloop()
