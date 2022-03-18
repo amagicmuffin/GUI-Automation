@@ -3,6 +3,7 @@ import pyautogui
 
 """main.py
 * TODO
+  + pyautogui doesn't send keyboard presses to minecraft for some reason, use import keyboard which works instead for some inexplicable reason
   + text file config
     +  each line: config = 2 then can remove whitespace and process
     + use .ini, more research in phone
@@ -151,7 +152,6 @@ startHoldingBtn.bind("<Button-1>", lambda e: startHoldingBtn.after(BUFFER_TIME, 
 keyboardGUI.pack()
 
 # screen
-screen.attributes("-fullscreen", True)
 screen.bind("<Escape>", lambda e: screen.destroy())
 
 
