@@ -86,7 +86,7 @@ keyboardToggles = {
 def startHolding():
     for k, v in keyboardToggles.items():
         if (k == "lmb" or k == "rmb") and v:
-            mouse.hold(button="LEFT" if k == "lmb" else "RIGHT")
+            mouse.press(button="left" if k == "lmb" else "right")
             continue
         if v:
             keyboard.press(k)
