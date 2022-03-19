@@ -1,9 +1,9 @@
 from tkinter import *
-import pyautogui
+import mouse
+import keyboard
 
 """main.py
 * TODO
-  + pyautogui doesn't send keyboard presses to minecraft for some reason, use import keyboard which works instead for some inexplicable reason
   + text file config
     +  each line: config = 2 then can remove whitespace and process
     + use .ini, more research in phone
@@ -53,7 +53,7 @@ def autoclick():
     global WORKING, AUTOCLICKING
 
     print("clicked once")
-    pyautogui.click()
+    mouse.click()
 
     if not WORKING:
         AUTOCLICKING = False
@@ -68,36 +68,26 @@ autoclicker.pack()
 
 
 # Toggle keyboard hold down
+# shift is first so you dont fall off a cliff because crouch wasn't pressed
 keyboardToggles = {
+    "shift": False,
     "lmb": False,
     "rmb": False,
     "w": False,
     "a": False,
     "s": False,
     "d": False,
-    "shift": False,
     "space": False,
 }
 
 
 def startHolding():
-    """shift and space are first so you dont fall off a cliff because crouch wasn't pressed"""
-    if keyboardToggles["shift"]:
-        pyautogui.keyDown("shift")
-    if keyboardToggles["space"]:
-        pyautogui.keyDown("space")
-    if keyboardToggles["lmb"]:
-        pyautogui.mouseDown(button="LEFT")
-    if keyboardToggles["rmb"]:
-        pyautogui.mouseDown(button="RIGHT")
-    if keyboardToggles["w"]:
-        pyautogui.keyDown("w")
-    if keyboardToggles["a"]:
-        pyautogui.keyDown("a")
-    if keyboardToggles["s"]:
-        pyautogui.keyDown("s")
-    if keyboardToggles["d"]:
-        pyautogui.keyDown("d")
+    for k, v in keyboardToggles.items():
+        if k == "lmb" or k == "rmb" and v:
+            mouse.hold(button="LEFT" if k == "lmb" else "RIGHT")
+            continue
+        if v:
+            keyboard.press(v)
 
 
 keyboardGUI = Label(sidebar)
