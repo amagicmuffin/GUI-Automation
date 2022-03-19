@@ -9,14 +9,17 @@ import keyboard
     + use .ini, more research in phone
   + reload configs button
   + much later: refactor to not look terrible
+  + later: import tkinter as tk instead of import * for better readablity
 """
-BACKGROUND_IMAGE = "darkBackground.png"
+
+# configs
+BACKGROUND_IMAGE = "darkenedPurpleSky.png"
+BUFFER_TIME = 1000
+AUTOCLICK_SPEED = 1000
+SIDEBAR_POS = LEFT  # from tkinter.constants
 
 WORKING = False
-BUFFER_TIME = 1000
-
 AUTOCLICKING = False
-AUTOCLICK_SPEED = 1000
 
 screen = Tk()
 screen.title("Automation GUI")
@@ -35,7 +38,7 @@ background.place(x=0, y=0, relwidth=1, relheight=1)
 
 # main sidebar, put stuff in here
 sidebar = Label()
-sidebar.pack(side=LEFT)
+sidebar.pack(side=SIDEBAR_POS)
 
 
 def startAutoclick():
