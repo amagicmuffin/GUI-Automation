@@ -14,9 +14,9 @@ import keyboard
 
 # configs
 BACKGROUND_IMAGE = "darkenedPurpleSky.png"
-BUFFER_TIME = 1000
+BUFFER_TIME = 3000
 AUTOCLICK_SPEED = 1000
-SIDEBAR_POS = LEFT  # from tkinter.constants
+SIDEBAR_POS = RIGHT  # from tkinter.constants
 
 WORKING = False
 AUTOCLICKING = False
@@ -55,7 +55,6 @@ def startAutoclick():
 def autoclick():
     global WORKING, AUTOCLICKING
 
-    print("clicked once")
     mouse.click()
 
     if not WORKING:
@@ -86,11 +85,11 @@ keyboardToggles = {
 
 def startHolding():
     for k, v in keyboardToggles.items():
-        if k == "lmb" or k == "rmb" and v:
+        if (k == "lmb" or k == "rmb") and v:
             mouse.hold(button="LEFT" if k == "lmb" else "RIGHT")
             continue
         if v:
-            keyboard.press(v)
+            keyboard.press(k)
 
 
 keyboardGUI = Label(sidebar)
@@ -146,6 +145,5 @@ keyboardGUI.pack()
 
 # screen
 screen.bind("<Escape>", lambda e: screen.destroy())
-
 
 screen.mainloop()
